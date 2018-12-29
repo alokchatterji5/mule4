@@ -1,0 +1,27 @@
+{
+  "configs": [
+    "gatherdata.xml",
+    "global.xml",
+    "standardize.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:gather-data:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.1.2",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "local-services-config.yaml",
+        "log4j2.xml",
+        "remote-services-config.yaml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

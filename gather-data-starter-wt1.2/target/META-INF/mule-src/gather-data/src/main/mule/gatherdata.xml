@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<flow name="postData" doc:id="18ec935c-9748-466e-9604-e33082ecc234" >
+		<http:listener doc:name="Listener" doc:id="a5b3b867-9dee-4113-bbec-7ffe5145ccbc" config-ref="HTTP_Listener_config" path="/post" allowedMethods="POST">
+		</http:listener>
+		<set-variable value="world!" doc:name="Set Variable" doc:id="2c2b98c8-a330-4c5a-9dd6-c7857d785262" variableName="hello" />
+		<logger level="INFO" doc:name="Logger" doc:id="c94abf96-fcde-44fa-8085-29202572cdf0" message="#[payload]"/>
+	</flow>
+	<flow name="gatherData" doc:id="b370431e-7c48-4222-8759-0f238c5f0965" >
+		<http:listener doc:name="Listener" doc:id="b8e62e70-a159-4922-b10b-e13e4ea13965" config-ref="HTTP_Listener_config" path="/gather" allowedMethods="GET"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="5529d0bf-9c13-4d54-a152-b1d575e7468d" >
+			<route >
+				<flow-ref doc:name="Flow Reference" doc:id="f972d1b9-5610-4caa-8898-8ae889629d09" name="getUnited"/>
+			</route>
+			<route >
+				<http:request method="GET" doc:name="Get United Flights" doc:id="7245a837-2d0f-4d30-bf1d-cfdfeb6a2c62" config-ref="HTTP_Request_United" path="${united.path}"/>
+			</route>
+		</scatter-gather>
+		<ee:transform doc:name="Convert to JSON" doc:id="b52fde50-0a36-48f0-9c50-c9393f6ef688" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+flatten (payload..payload as Array)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
